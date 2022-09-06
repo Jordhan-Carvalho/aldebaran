@@ -1,8 +1,6 @@
 package webserver
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 	"github.com/jordhan-carvalho/aldebaran/internal/controllers"
 	"github.com/jordhan-carvalho/aldebaran/internal/services"
@@ -18,6 +16,9 @@ func InitWebServer() {
 func WebRouter(r *gin.Engine) (router *gin.Engine) {
 
 	// Health check
+	statusService := services.NewStatusService()
+	statusController := controllers.NewStatusController(&statusService)
+	r.GET("/health", statusController.GetAldebaranStatus)
 
 	/* // Routes - Status Check
 	status := controllers.NewStatusController(svcInfo, dbMgr)
@@ -46,13 +47,6 @@ func WebRouter(r *gin.Engine) (router *gin.Engine) {
 			ordersGroup.DELETE("/:id", orders.DeleteById) // api/v1/orders/:id
 		}
 	} */
-	r.GET("/health", func(ctx *gin.Context) {
-		statusController := controllers.StatusController{}
-		statusService := services.StatusService{}
-		message := statusController.GetAldebaranStatus(&statusService)
-
-		ctx.JSON(http.StatusOK, message)
-	})
 
 	// router.Run()
 	router = r

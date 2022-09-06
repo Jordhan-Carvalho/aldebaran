@@ -1,11 +1,13 @@
 package services
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestGetStatus(t *testing.T) {
   expectedResp := "Aldebaran lives!!"
 
-  statusService := StatusService{} 
+  statusService := NewStatusService() 
   resp := statusService.GetStatus()
 
   if resp != expectedResp {
